@@ -27,25 +27,28 @@ end
 class Deck
   def initialize(size)
     @size = size
-    @cards = []
   end
 
   public
   def get_card
-    next_card
+    @cards.pop
   end
 
   private
-  def next_card
-    Card.new
+  def cards
+    @cards ||= Array.new(@size) { Card.new(create_directions) }
+  end
+
+  def create_directions
+    Coordinates.new(rand(-4...4), rand(-4...4))
   end
 end
 
 class Card
   attr_reader :directions
 
-  def initialize
-    @directions = Coordinates.new(rand(-4...4), rand(-4...4))
+  def initialize(directions)
+    @directions = directions
   end
 end
 
