@@ -28,6 +28,7 @@ class Player
   end
 end
 
+
 class Deck
   def initialize(size)
     @size = size
@@ -50,18 +51,24 @@ class Card
 
   public
   def directions
-    @directions ||= Coordinates.new(rand(-4...4), rand(-4...4))
+    @directions ||= create_directions
+  end
+
+  private
+  def create_directions
+    Coordinates.new(rand(-4...4), rand(-4...4))
   end
 end
 
+
 class Tub
 end
+
 
 class GamePiece
   attr_reader :position
 
   def initialize(starting_position)
-    # position should be an object with at least two attributes: "x" and "y"
     @position = starting_position
   end
 
@@ -80,5 +87,4 @@ class GamePiece
   def move_vertically(spaces)
     position.y += spaces
   end
-
 end
