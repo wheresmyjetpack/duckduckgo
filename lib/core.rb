@@ -1,9 +1,23 @@
 class Player
   attr_reader :name
 
-  def initialize(name, duck)
+  def initialize(name, duck, deck)
     @name = name
     @duck = duck
+    @deck = deck
+  end
+
+  public
+  def take_turn
+  end
+
+  private
+  def draw
+    deck.get_card
+  end
+
+  def move_piece(directions)
+    duck.move(directions)
   end
 end
 
