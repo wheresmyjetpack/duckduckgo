@@ -1,3 +1,5 @@
+Coordinates = Struct.new(:x, :y)
+
 class Player
   attr_reader :name
 
@@ -9,16 +11,16 @@ class Player
 
   public
   def take_turn
-    move_piece(draw)
+    move_piece(draw.directions)
   end
 
   private
   def draw
-    deck.get_card
+    @deck.get_card
   end
 
   def move_piece(directions)
-    game_piece.move(directions)
+    @game_piece.move(directions)
   end
 end
 
@@ -42,7 +44,7 @@ class Card
   attr_reader :directions
 
   def initialize
-    @directions = Array.new(2) { rand(-4...4) }
+    @directions = Coordinates.new(rand(-4...4), rand(-4...4))
   end
 end
 
@@ -50,11 +52,27 @@ class Tub
 end
 
 class GamePiece
-  attr_accessor :position
+  attr_reader :position
 
-  def initialize
+  def initialize(starting_position)
+    # @position should be an object with at least two attributes: "x" and "y"
+    @position = starting_position
   end
 
-  def move
+  public
+  def move(directions)
+    move_horizontally(directions.x)
+    move_vertically(directions.y)
+    puts position.x, position.y
   end
+
+  private
+  def move_horizontally(spaces)
+    position.x += spaces
+  end
+
+  def move_vertically(spaces)
+    position.y += spaces
+  end
+
 end
