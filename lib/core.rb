@@ -1,10 +1,10 @@
 class Player
   attr_reader :name
 
-  def initialize(name, game_piece, deck)
-    @name = name
-    @game_piece = game_piece
-    @deck = deck
+  def initialize(args)
+    @name = args[:name] || 'Sally Roe'
+    @game_piece = args[:game_piece]
+    @deck = args[:deck]
   end
 
   public
