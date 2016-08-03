@@ -27,15 +27,16 @@ end
 class Deck
   def initialize(size)
     @size = size
+    @cards = []
   end
 
   public
   def get_card
-    new_card
+    next_card
   end
 
   private
-  def new_card
+  def next_card
     Card.new
   end
 end
@@ -55,7 +56,7 @@ class GamePiece
   attr_reader :position
 
   def initialize(starting_position)
-    # @position should be an object with at least two attributes: "x" and "y"
+    # position should be an object with at least two attributes: "x" and "y"
     @position = starting_position
   end
 
