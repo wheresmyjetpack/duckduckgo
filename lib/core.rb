@@ -22,8 +22,11 @@ class Player
 end
 
 class Deck
-    def initialize
-    end
+  def initialize
+  end
+
+  def get_card
+  end
 end
 
 class Tub
@@ -33,5 +36,8 @@ class Duck
   attr_accessor :position
 
   def initialize
+  end
+
+  def move
   end
 end
