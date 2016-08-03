@@ -11,7 +11,7 @@ class Player
 
   public
   def take_turn
-    move_piece(draw.directions)
+    move_piece(follow_directions)
   end
 
   private
@@ -22,6 +22,10 @@ class Player
   def move_piece(directions)
     @game_piece.move(directions)
   end
+
+  def follow_directions
+    draw.directions
+  end
 end
 
 class Deck
@@ -31,24 +35,22 @@ class Deck
 
   public
   def get_card
-    @cards.pop
+    cards.pop
   end
 
   private
   def cards
-    @cards ||= Array.new(@size) { Card.new(create_directions) }
+    @cards ||= Array.new(@size) { Card.new }
   end
 
-  def create_directions
-    Coordinates.new(rand(-4...4), rand(-4...4))
-  end
 end
 
 class Card
   attr_reader :directions
 
-  def initialize(directions)
-    @directions = directions
+  public
+  def directions
+    @directions ||= Coordinates.new(rand(-4...4), rand(-4...4))
   end
 end
 
