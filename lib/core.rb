@@ -74,17 +74,19 @@ class GamePiece
 
   public
   def move(directions)
+    puts "Starting at #{position.x}, #{position.y}"
+    puts "Directions: #{directions.x}, #{directions.y}"
     move_horizontally(directions.x)
     move_vertically(directions.y)
-    puts position.x, position.y
+    puts "Moved to #{position.x}, #{position.y}"
   end
 
   private
   def move_horizontally(spaces)
-    position.x += spaces
+    @position.x += spaces
   end
 
   def move_vertically(spaces)
-    position.y += spaces
+    @position.y += spaces
   end
 end
