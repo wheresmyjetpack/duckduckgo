@@ -61,7 +61,7 @@ class Card
 end
 
 
-class Tub
+class Board
 end
 
 
