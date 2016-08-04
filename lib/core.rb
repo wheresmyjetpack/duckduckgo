@@ -1,17 +1,30 @@
 Coordinates = Struct.new(:x, :y)
 
 class Player
-  attr_reader :name
+  attr_reader :name, :buoys
 
   def initialize(args)
     @name = args[:name] || 'Sally Roe'
     @game_piece = args[:game_piece]
     @deck = args[:deck]
+    @buoys = []
   end
 
   public
   def take_turn
     move_piece(follow_directions)
+  end
+
+  def piece_position
+    @game_piece.position
+  end
+  
+  def piece_on_buoy?
+    @game_piece.on_buoy?
+  end
+
+  def piece_on_board?
+    @game_piece.on_board?
   end
 
   private
@@ -21,10 +34,15 @@ class Player
 
   def move_piece(directions)
     @game_piece.move(directions)
+    check_for_buoy
   end
 
   def follow_directions
     draw.directions
+  end
+
+  def check_for_buoy
+    @buoys << piece_position if piece_on_buoy?
   end
 end
 
@@ -37,6 +55,10 @@ class Deck
   public
   def get_card
     cards.pop
+  end
+
+  def cards_count
+    cards.count
   end
 
   private
@@ -56,7 +78,7 @@ class Card
 
   private
   def create_directions
-    Coordinates.new(rand(0...6), rand(0...6))
+    Coordinates.new(rand(-3...3), rand(-3...3))
   end
 end
 
@@ -99,7 +121,7 @@ class Board
   end
   
   def number_buoys
-    num_squares / 4
+    num_squares / 5
   end
 
   def create_buoy_unless_exists
@@ -129,16 +151,14 @@ class GamePiece
     update_position(directions)
   end
 
+  def on_buoy?
+    board_buoys.include? @position 
+  end
+
   private
   def update_position(directions)
     move_to = new_position(directions)
-    if on_board?(move_to)
-      puts "Moving to #{move_to}"
-      @position = move_to
-      puts "Landed on a buoy!" if on_buoy?
-    else
-      puts "space not on board"
-    end
+    @position = move_to if on_board?(move_to)
   end
 
   def x_position
@@ -151,10 +171,6 @@ class GamePiece
 
   def new_position(directions)
     Coordinates.new((x_position + directions.x), (y_position + directions.y))
-  end
-
-  def on_buoy?
-    board_buoys.include? @position 
   end
 
   def board_buoys
