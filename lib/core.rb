@@ -56,19 +56,71 @@ class Card
 
   private
   def create_directions
-    Coordinates.new(rand(-4...4), rand(-4...4))
+    Coordinates.new(rand(0...6), rand(0...6))
   end
 end
 
 
-class Tub
+class Board
+  attr_reader :width, :height
+
+  def initialize(dimensions)
+    @width = dimensions.x
+    @height = dimensions.y
+    @buoys = []
+  end
+
+  public
+  def buoys
+    number_buoys.times { @buoys << create_buoy_unless_exists } unless @buoys.any?
+    @buoys
+  end
+
+  def on_board?(position)
+    squares.include? position
+  end
+
+  private
+  def num_squares
+    height * width
+  end
+
+  def squares
+    squares = []
+    x_coords = (0..width).to_a
+    y_coords = (0..height).to_a
+
+    x_coords.each do |x|
+      y_coords.each do |y|
+        squares << Coordinates.new(x, y)
+      end
+    end
+    squares
+  end
+  
+  def number_buoys
+    num_squares / 4
+  end
+
+  def create_buoy_unless_exists
+    unless @buoys.include? new_buoy
+      new_buoy
+    else
+      create_buoy_unless_exists
+    end
+  end
+
+  def new_buoy
+    Coordinates.new(rand(0...width), rand(0...height))
+  end
 end
 
 
 class GamePiece
   attr_reader :position
 
-  def initialize(starting_position)
+  def initialize(board, starting_position)
+    @board = board
     @position = starting_position
   end
 
@@ -79,11 +131,11 @@ class GamePiece
 
   private
   def update_position(directions)
-    puts "Starting at #{position.x}, #{position.y}"
-    puts "Directions: #{directions.x}, #{directions.y}"
     move_horizontally(directions)
     move_vertically(directions)
-    puts "Moved to #{position.x}, #{position.y}"
+    puts "Moving to #{@position}"
+    puts "space not on board" unless on_board? 
+    puts "Landed on a buoy!" if on_buoy?
   end
 
   def move_horizontally(directions)
@@ -92,5 +144,17 @@ class GamePiece
 
   def move_vertically(directions)
     @position.y += directions.y
+  end
+
+  def on_buoy?
+    board_buoys.include? @position 
+  end
+
+  def board_buoys
+    @board.buoys
+  end
+
+  def on_board?
+    @board.on_board?(@position)
   end
 end
