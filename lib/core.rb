@@ -87,8 +87,8 @@ class Board
 
   def squares
     squares = []
-    x_coords = (0..width).to_a
-    y_coords = (0..height).to_a
+    x_coords = (0...width).to_a
+    y_coords = (0...height).to_a
 
     x_coords.each do |x|
       y_coords.each do |y|
@@ -131,19 +131,26 @@ class GamePiece
 
   private
   def update_position(directions)
-    move_horizontally(directions)
-    move_vertically(directions)
-    puts "Moving to #{@position}"
-    puts "space not on board" unless on_board? 
-    puts "Landed on a buoy!" if on_buoy?
+    move_to = new_position(directions)
+    if on_board?(move_to)
+      puts "Moving to #{move_to}"
+      @position = move_to
+      puts "Landed on a buoy!" if on_buoy?
+    else
+      puts "space not on board"
+    end
   end
 
-  def move_horizontally(directions)
-    @position.x += directions.x
+  def x_position
+    @position.x
   end
 
-  def move_vertically(directions)
-    @position.y += directions.y
+  def y_position
+    @position.y
+  end
+
+  def new_position(directions)
+    Coordinates.new((x_position + directions.x), (y_position + directions.y))
   end
 
   def on_buoy?
@@ -154,7 +161,7 @@ class GamePiece
     @board.buoys
   end
 
-  def on_board?
-    @board.on_board?(@position)
+  def on_board?(position)
+    @board.on_board?(position)
   end
 end
