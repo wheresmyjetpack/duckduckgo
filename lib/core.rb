@@ -74,19 +74,23 @@ class GamePiece
 
   public
   def move(directions)
-    puts "Starting at #{position.x}, #{position.y}"
-    puts "Directions: #{directions.x}, #{directions.y}"
-    move_horizontally(directions.x)
-    move_vertically(directions.y)
-    puts "Moved to #{position.x}, #{position.y}"
+    update_position(directions)
   end
 
   private
-  def move_horizontally(spaces)
-    @position.x += spaces
+  def update_position(directions)
+    puts "Starting at #{position.x}, #{position.y}"
+    puts "Directions: #{directions.x}, #{directions.y}"
+    move_horizontally(directions)
+    move_vertically(directions)
+    puts "Moved to #{position.x}, #{position.y}"
   end
 
-  def move_vertically(spaces)
-    @position.y += spaces
+  def move_horizontally(directions)
+    @position.x += directions.x
+  end
+
+  def move_vertically(directions)
+    @position.y += directions.y
   end
 end
