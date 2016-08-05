@@ -6,7 +6,7 @@ def winner?(player, buoys)
   buoys & player.objectives == buoys
 end
 
-board = Board.new(Coordinates.new(5, 10))
+board = Board.new(Coordinates.new(8, 5))
 deck = Deck.new(100)
 buoys = board.objectives
 

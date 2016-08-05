@@ -78,7 +78,12 @@ class Card
 
   private
   def create_directions
-    Coordinates.new(rand(-3...3), rand(-3...3))
+    directions = Coordinates.new(rand(-4...4), rand(-4...4))
+    unless directions.x == 0 && directions.y == 0
+      directions
+    else
+      create_directions
+    end
   end
 end
 
@@ -114,11 +119,9 @@ class Board
 
   def grid
     grid = []
-    x_coords = (0...width).to_a
-    y_coords = (0...height).to_a
 
-    x_coords.each do |x|
-      y_coords.each do |y|
+    (0..width).each do |x|
+      (0..height).each do |y|
         grid << Coordinates.new(x, y)
       end
     end
@@ -164,6 +167,8 @@ class GamePiece
   private
   def update_position(directions)
     move_to = new_position(directions)
+    puts "Directions #{directions}"
+    puts "New position #{move_to}"
     @position = move_to if on_board?(move_to)
   end
 
@@ -176,7 +181,16 @@ class GamePiece
   end
 
   def new_position(directions)
-    Coordinates.new(( x_position + directions.x ), ( y_position + directions.y ))
+    x = x_position + directions.x
+    y = y_position + directions.y
+
+    x = @board.width if x > @board.width
+    x = 0 if x < 0
+   
+    y = @board.height if y > @board.height
+    y = 0 if y < 0
+
+    Coordinates.new(x, y)
   end
 
   def board_objectives
