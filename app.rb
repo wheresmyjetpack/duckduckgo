@@ -36,7 +36,8 @@ while not game_over
     puts "#{player.name}'s turn"
     puts "Starting at #{start_position.x}, #{start_position.y}"
 
-    player.take_turn
+    card = player.draw
+    player.move(game_piece, card.directions)
     new_position = player.get_position(game_piece)
 
     unless new_position == start_position

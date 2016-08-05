@@ -11,38 +11,26 @@ class Player
   end
 
   public
-  def take_turn
-    move_piece(follow_directions)
+  def draw
+    @deck.get_card
+  end
+
+  def move(item, directions)
+    item.move(directions)
+    add_objectives
   end
 
   def get_position(item)
     item.position
   end
 
-  def piece_on_board?
-    @game_piece.on_board?
-  end
-
   private
-  def draw
-    @deck.get_card
+  def on_objective?(item)
+    item.on_objective?
   end
 
-  def move_piece(directions)
-    @game_piece.move(directions)
-    check_for_objective
-  end
-
-  def follow_directions
-    draw.directions
-  end
-  
-  def piece_on_objective?
-    @game_piece.on_objective?
-  end
-
-  def check_for_objective
-    @objectives << get_position(@game_piece) if piece_on_objective?
+  def add_objectives
+    @objectives << get_position(@game_piece) if on_objective?(@game_piece)
   end
 end
 
