@@ -18,10 +18,6 @@ class Player
   def get_position(item)
     item.position
   end
-  
-  def piece_on_objective?
-    @game_piece.on_objective?
-  end
 
   def piece_on_board?
     @game_piece.on_board?
@@ -40,9 +36,13 @@ class Player
   def follow_directions
     draw.directions
   end
+  
+  def piece_on_objective?
+    @game_piece.on_objective?
+  end
 
   def check_for_objective
-    @objectives << piece_position if piece_on_objective?
+    @objectives << get_position(@game_piece) if piece_on_objective?
   end
 end
 

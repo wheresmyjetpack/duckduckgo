@@ -6,7 +6,7 @@ def winner?(player, buoys)
   buoys & player.objectives == buoys
 end
 
-board = Board.new(Coordinates.new(8, 5))
+board = Board.new(Coordinates.new(5, 5))
 deck = Deck.new(100)
 buoys = board.objectives
 
@@ -41,7 +41,7 @@ while not game_over
 
     unless new_position == start_position
       puts "Moved to #{new_position.x}, #{new_position.y}"
-      puts "Landed on a buoy!" if player.piece_on_objective?
+      puts "Landed on a buoy!" if game_piece.on_objective?
     else
       puts "The move will take you off the board, staying put!"
     end
