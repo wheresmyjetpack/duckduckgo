@@ -34,7 +34,7 @@ while not game_over
     start_position = player.get_position(game_piece)
 
     puts "#{player.name}'s turn"
-    puts "Starting at #{position.x}, #{position.y}"
+    puts "Starting at #{start_position.x}, #{start_position.y}"
 
     player.take_turn
     new_position = player.get_position(game_piece)
