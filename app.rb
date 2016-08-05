@@ -30,15 +30,16 @@ game_over = false
 puts "DBUG: objectives count [#{buoys.size}]"
 while not game_over 
   players.each do |player|
-    position = player.piece_position
+    game_piece = player.game_piece
+    start_position = player.get_position(game_piece)
 
     puts "#{player.name}'s turn"
     puts "Starting at #{position.x}, #{position.y}"
 
     player.take_turn
-    new_position = player.piece_position
+    new_position = player.get_position(game_piece)
 
-    unless new_position == position
+    unless new_position == start_position
       puts "Moved to #{new_position.x}, #{new_position.y}"
       puts "Landed on a buoy!" if player.piece_on_objective?
     else

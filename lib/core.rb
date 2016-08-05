@@ -1,7 +1,7 @@
 Coordinates = Struct.new(:x, :y)
 
 class Player
-  attr_reader :name, :objectives
+  attr_reader :name, :objectives, :game_piece
 
   def initialize(args)
     @name = args[:name] || 'Sally Roe'
@@ -15,8 +15,8 @@ class Player
     move_piece(follow_directions)
   end
 
-  def piece_position
-    @game_piece.position
+  def get_position(item)
+    item.position
   end
   
   def piece_on_objective?
