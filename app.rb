@@ -3,12 +3,12 @@
 require_relative 'lib/core'
 
 def winner?(player, buoys)
-  buoys & player.buoys == buoys
+  buoys & player.objectives == buoys
 end
 
-board = Board.new(Coordinates.new(6, 6))
+board = Board.new(Coordinates.new(5, 10))
 deck = Deck.new(100)
-buoys = board.buoys
+buoys = board.objectives
 
 puts "Welcome to Duck Duck Go!"
 puts "How many players? "
@@ -26,6 +26,8 @@ end
 
 game_over = false
 
+
+puts "DBUG: objectives count [#{buoys.size}]"
 while not game_over 
   players.each do |player|
     position = player.piece_position
@@ -38,7 +40,7 @@ while not game_over
 
     unless new_position == position
       puts "Moved to #{new_position.x}, #{new_position.y}"
-      puts "Landed on a buoy!" if player.piece_on_buoy?
+      puts "Landed on a buoy!" if player.piece_on_objective?
     else
       puts "The move will take you off the board, staying put!"
     end
@@ -56,6 +58,8 @@ while not game_over
       game_over = true
       break
     end
+
+    gets
   end
 end
 

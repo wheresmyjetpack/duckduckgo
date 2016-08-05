@@ -1,13 +1,13 @@
 Coordinates = Struct.new(:x, :y)
 
 class Player
-  attr_reader :name, :buoys
+  attr_reader :name, :objectives
 
   def initialize(args)
     @name = args[:name] || 'Sally Roe'
     @game_piece = args[:game_piece]
     @deck = args[:deck]
-    @buoys = []
+    @objectives = []
   end
 
   public
@@ -19,8 +19,8 @@ class Player
     @game_piece.position
   end
   
-  def piece_on_buoy?
-    @game_piece.on_buoy?
+  def piece_on_objective?
+    @game_piece.on_objective?
   end
 
   def piece_on_board?
@@ -34,15 +34,15 @@ class Player
 
   def move_piece(directions)
     @game_piece.move(directions)
-    check_for_buoy
+    check_for_objective
   end
 
   def follow_directions
     draw.directions
   end
 
-  def check_for_buoy
-    @buoys << piece_position if piece_on_buoy?
+  def check_for_objective
+    @objectives << piece_position if piece_on_objective?
   end
 end
 
@@ -89,51 +89,57 @@ class Board
   def initialize(dimensions)
     @width = dimensions.x
     @height = dimensions.y
-    @buoys = []
+    @objectives = []
   end
 
   public
-  def buoys
-    number_buoys.times { @buoys << create_buoy_unless_exists } unless @buoys.any?
-    @buoys
+  def objectives
+    if @objectives.empty?
+      number_objectives.times do 
+        @objectives << create_objective
+        #puts @objectives
+      end
+    end
+   @objectives
   end
 
   def on_board?(position)
-    squares.include? position
+    grid.include? position
   end
 
   private
-  def num_squares
+  def area
     height * width
   end
 
-  def squares
-    squares = []
+  def grid
+    grid = []
     x_coords = (0...width).to_a
     y_coords = (0...height).to_a
 
     x_coords.each do |x|
       y_coords.each do |y|
-        squares << Coordinates.new(x, y)
+        grid << Coordinates.new(x, y)
       end
     end
-    squares
+    grid
   end
   
-  def number_buoys
-    num_squares / 5
+  def number_objectives
+    puts (( height + width ) / 2) / 2
+    (( height + width ) / 2) / 2
   end
 
-  def create_buoy_unless_exists
-    unless @buoys.include? new_buoy
-      new_buoy
+  def create_objective
+    unless @objectives.include? new_objective
+      new_objective
     else
-      create_buoy_unless_exists
+      create_objective
     end
   end
 
-  def new_buoy
-    Coordinates.new(rand(0...width), rand(0...height))
+  def new_objective
+    Coordinates.new(rand( 0...width ), rand( 0...height ))
   end
 end
 
@@ -151,8 +157,8 @@ class GamePiece
     update_position(directions)
   end
 
-  def on_buoy?
-    board_buoys.include? @position 
+  def on_objective?
+    board_objectives.include? @position 
   end
 
   private
@@ -170,11 +176,11 @@ class GamePiece
   end
 
   def new_position(directions)
-    Coordinates.new((x_position + directions.x), (y_position + directions.y))
+    Coordinates.new(( x_position + directions.x ), ( y_position + directions.y ))
   end
 
-  def board_buoys
-    @board.buoys
+  def board_objectives
+    @board.objectives
   end
 
   def on_board?(position)
